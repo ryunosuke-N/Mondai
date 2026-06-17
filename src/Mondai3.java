@@ -116,7 +116,7 @@ public class Mondai3 {
         Scanner scanner =
                 new Scanner(System.in);
 
-        // 初期残高10000円
+        // 初期残高0円
         Account account =
                 new Account(0);
 
