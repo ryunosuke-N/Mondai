@@ -118,7 +118,7 @@ public class Mondai3 {
 
         // 初期残高10000円
         Account account =
-                new Account(10000);
+                new Account(0);
 
         // ATM生成
         ATM atm =
