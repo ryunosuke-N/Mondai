@@ -57,6 +57,7 @@ class Account {
  * ATMの機能を管理する
  */
 class ATM {
+	private int dailyWithdrawTotal = 0;
 	// 利用履歴
 	private ArrayList<String> histories =
 	        new ArrayList<>();
@@ -105,7 +106,7 @@ class ATM {
      * 出金
      */
     public void withdraw(int amount) {
-
+    	
         // 1回の出金上限
         final int LIMIT = 50000;
 
@@ -145,6 +146,12 @@ class ATM {
             histories.add(
                     amount
                     + "円出金失敗(残高不足)");
+        }
+        
+        if (dailyWithdrawTotal + amount > 100000) {
+            System.out.println(
+                "本日の出金上限(100000円)を超えています。");
+            return;
         }
     }
     /**
