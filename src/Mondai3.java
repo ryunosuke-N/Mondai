@@ -9,12 +9,15 @@ class Account {
 
     // 残高
     private int balance;
+    // 暗証番号
+    private String pin;
 
     /**
      * コンストラクタ
      */
-    public Account(int balance) {
+    public Account(int balance, String pin) {
         this.balance = balance;
+        this.pin = pin;
     }
 
     /**
@@ -23,7 +26,10 @@ class Account {
     public int getBalance() {
         return balance;
     }
-
+    
+    public String getPin() {
+        return pin;
+    }
     /**
      * 入金処理
      */
@@ -155,14 +161,53 @@ public class Mondai3 {
         Scanner scanner =
                 new Scanner(System.in);
 
-        // 初期残高0円
+        // 初期残高10000円
+        // 暗証番号は1234
         Account account =
-                new Account(0);
-
+             new Account(10000, "1234");
+        
         // ATM生成
         ATM atm =
                 new ATM(account);
-
+	     // --------------------
+	     // 暗証番号認証
+	     // --------------------
+	
+	     boolean authenticated = false;
+	
+	     for (int i = 1; i <= 3; i++) {
+	
+	         System.out.print(
+	                 "暗証番号を入力してください > ");
+	
+	         String inputPin =
+	                 scanner.next();
+	
+	         if (inputPin.equals(
+	                 account.getPin())) {
+	
+	             authenticated = true;
+	
+	             System.out.println(
+	                     "認証成功");
+	             break;
+	
+	         } else {
+	
+	             System.out.println(
+	                     "暗証番号が違います");
+	         }
+	     }
+	
+	     // 3回失敗した場合
+	     if (!authenticated) {
+	
+	         System.out.println(
+	                 "3回連続で失敗したため終了します");
+	
+	         scanner.close();
+	         return;
+	     }
         while (true) {
 
             System.out.println();
