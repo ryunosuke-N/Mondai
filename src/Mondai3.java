@@ -106,6 +106,24 @@ class ATM {
      */
     public void withdraw(int amount) {
 
+        // 1回の出金上限
+        final int LIMIT = 50000;
+
+        // 上限チェック
+        if (amount > LIMIT) {
+
+            System.out.println(
+                    "1回の出金上限は"
+                    + LIMIT
+                    + "円です。");
+
+            histories.add(
+                    amount
+                    + "円出金失敗(上限超過)");
+
+            return;
+        }
+
         boolean result =
                 account.withdraw(amount);
 
@@ -114,6 +132,7 @@ class ATM {
             System.out.println(
                     amount
                     + " 円出金しました。");
+
             histories.add(
                     amount
                     + "円出金");
@@ -122,9 +141,10 @@ class ATM {
 
             System.out.println(
                     "残高が不足しています。");
+
             histories.add(
                     amount
-                    + "円出金失敗");
+                    + "円出金失敗(残高不足)");
         }
     }
     /**
