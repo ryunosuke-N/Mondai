@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -50,7 +51,10 @@ class Account {
  * ATMの機能を管理する
  */
 class ATM {
-
+	// 利用履歴
+	private ArrayList<String> histories =
+	        new ArrayList<>();
+	
     // 口座情報
     private Account account;
 
@@ -70,6 +74,10 @@ class ATM {
                 "現在の残高は "
                 + account.getBalance()
                 + " 円です。");
+        histories.add(
+                "残高照会 : "
+                + account.getBalance()
+                + "円");
     }
 
     /**
@@ -82,6 +90,9 @@ class ATM {
         System.out.println(
                 amount
                 + " 円入金しました。");
+        histories.add(
+                amount
+                + "円入金");
     }
 
     /**
@@ -97,14 +108,42 @@ class ATM {
             System.out.println(
                     amount
                     + " 円出金しました。");
+            histories.add(
+                    amount
+                    + "円出金");
 
         } else {
 
             System.out.println(
                     "残高が不足しています。");
+            histories.add(
+                    amount
+                    + "円出金失敗");
+        }
+    }
+    /**
+     * 利用履歴表示
+     */
+    public void showHistory() {
+
+        System.out.println();
+        System.out.println("===== 利用履歴 =====");
+
+        if (histories.isEmpty()) {
+
+            System.out.println(
+                    "履歴はありません");
+            return;
+        }
+
+        for (String history : histories) {
+
+            System.out.println(
+                    history);
         }
     }
 }
+
 
 /**
  * メインクラス
@@ -131,6 +170,7 @@ public class Mondai3 {
             System.out.println("1. 残高照会");
             System.out.println("2. 入金");
             System.out.println("3. 出金");
+            System.out.println("4. 利用履歴");
             System.out.println("0. 終了");
 
             System.out.print("選択 > ");
@@ -172,6 +212,11 @@ public class Mondai3 {
                 atm.withdraw(
                         withdrawAmount);
 
+                break;
+                
+            case 4:
+
+                atm.showHistory();
                 break;
 
             case 0:
