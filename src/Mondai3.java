@@ -11,11 +11,13 @@ class Account {
     private int balance;
     // 暗証番号
     private String pin;
-
+    // 口座番号
+    private String accountNumber;
     /**
      * コンストラクタ
      */
-    public Account(int balance, String pin) {
+    public Account( String accountNumber,int balance, String pin) {
+    	this.accountNumber = accountNumber;
         this.balance = balance;
         this.pin = pin;
     }
@@ -49,6 +51,9 @@ class Account {
 
         balance -= amount;
         return true;
+    }
+    public String getAccountNumber() {
+        return accountNumber;
     }
 }
 
@@ -148,10 +153,48 @@ class ATM {
                     + "円出金失敗(残高不足)");
         }
         
+        
         if (dailyWithdrawTotal + amount > 100000) {
             System.out.println(
                 "本日の出金上限(100000円)を超えています。");
             return;
+        }
+    }
+    /**
+     * 振込
+     */
+    public void transfer(
+            Account destination,
+            int amount) {
+
+        // 出金処理
+        boolean result =
+                account.withdraw(amount);
+
+        if (result) {
+
+            // 振込先へ入金
+            destination.deposit(amount);
+
+            System.out.println(
+                    amount
+                    + "円を口座"
+                    + destination.getAccountNumber()
+                    + "へ振り込みました。");
+
+            histories.add(
+                    amount
+                    + "円振込 → "
+                    + destination.getAccountNumber());
+
+        } else {
+
+            System.out.println(
+                    "残高不足のため振込できません。");
+
+            histories.add(
+                    amount
+                    + "円振込失敗");
         }
     }
     /**
@@ -190,12 +233,23 @@ public class Mondai3 {
 
         // 初期残高10000円
         // 暗証番号は1234
-        Account account =
-             new Account(10000, "1234");
+     // 利用者口座
+        Account account1 =
+                new Account(
+                        "1001",
+                        10000,
+                        "1234");
+
+        // 振込先口座
+        Account account2 =
+                new Account(
+                        "2001",
+                        5000,
+                        "5678");
         
         // ATM生成
         ATM atm =
-                new ATM(account);
+                new ATM(account1);
 	     // --------------------
 	     // 暗証番号認証
 	     // --------------------
@@ -211,7 +265,7 @@ public class Mondai3 {
 	                 scanner.next();
 	
 	         if (inputPin.equals(
-	                 account.getPin())) {
+	                 account1.getPin())) {
 	
 	             authenticated = true;
 	
@@ -243,6 +297,7 @@ public class Mondai3 {
             System.out.println("2. 入金");
             System.out.println("3. 出金");
             System.out.println("4. 利用履歴");
+            System.out.println("5. 振込");
             System.out.println("0. 終了");
 
             System.out.print("選択 > ");
@@ -289,6 +344,20 @@ public class Mondai3 {
             case 4:
 
                 atm.showHistory();
+                break;
+                
+            case 5:
+
+                System.out.print(
+                        "振込金額 > ");
+
+                int transferAmount =
+                        scanner.nextInt();
+
+                atm.transfer(
+                        account2,
+                        transferAmount);
+
                 break;
 
             case 0:
